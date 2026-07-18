@@ -1,0 +1,224 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme static {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+}
+@theme static {
+  --color-paper: #f4f1ea;
+  --color-paper-warm: #efece3;
+  --color-card: #fdfcf9;
+  --color-ink: #14161c;
+  --color-ink-soft: #4c5261;
+  --color-royal: #2a5cb8;
+  --color-royal-deep: #1d4487;
+  --color-royal-sky: #b7cdf0;
+  --color-sketch: #9db8dd;
+  --color-valorant: #ff4655;
+  --color-fcgreen: #00b356;
+  --color-gold: #c99700;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+:root {
+  --ui-bg: var(--color-paper);
+}
+
+body {
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Paper grain — layered over the background, under content */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.34 0 0 0 0 0.3 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* #__nuxt {
+  position: relative;
+  z-index: 1;
+} */
+
+/* ::selection {
+  background: var(--color-royal);
+  color: #fff;
+} */
+
+/* Paper card with inked border + offset print shadow */
+.paper-card {
+  background: var(--color-card);
+  border: 2px solid var(--color-ink);
+  border-radius: 1.25rem;
+  box-shadow: 5px 5px 0 0 var(--color-ink);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.paper-card-hover:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0 0 var(--color-ink);
+}
+
+/* Blue-inked variant */
+.paper-card-royal {
+  border-color: var(--color-royal-deep);
+  box-shadow: 5px 5px 0 0 var(--color-royal-deep);
+}
+.paper-card-royal.paper-card-hover:hover {
+  box-shadow: 8px 8px 0 0 var(--color-royal-deep);
+}
+
+/* Sticker chip — small rotated label, like a price sticker */
+.sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 2px solid var(--color-ink);
+  border-radius: 999px;
+  padding: 0.4rem 1rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: #fff;
+  box-shadow: 3px 3px 0 0 var(--color-ink);
+}
+
+/* Section kicker — bilingual, poster style */
+.kicker {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-royal);
+}
+
+/* Dashed print divider (like the poster's separators) */
+.print-divider {
+  border: none;
+  border-top: 2px dashed color-mix(in srgb, var(--color-ink) 30%, transparent);
+}
+
+/* Hand-drawn sketch stroke for doodles */
+.sketch-stroke {
+  stroke: var(--color-sketch);
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Marker highlight behind key words */
+.marker-royal,
+.marker-red,
+.marker-green {
+  position: relative;
+  white-space: nowrap;
+}
+.marker-royal::after,
+.marker-red::after,
+.marker-green::after {
+  content: "";
+  position: absolute;
+  left: -0.15em;
+  right: -0.15em;
+  bottom: 0.02em;
+  height: 0.38em;
+  z-index: -1;
+  border-radius: 0.12em;
+  transform: rotate(-0.6deg);
+}
+.marker-royal::after {
+  background: color-mix(in srgb, var(--color-royal) 30%, transparent);
+}
+.marker-red::after {
+  background: color-mix(in srgb, var(--color-valorant) 32%, transparent);
+}
+.marker-green::after {
+  background: color-mix(in srgb, var(--color-fcgreen) 32%, transparent);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   MOTION
+   ════════════════════════════════════════════════════════════════ */
+
+/* Scroll reveal (driven by the v-reveal directive) */
+.reveal-hidden {
+  opacity: 0;
+  transform: translateY(26px);
+}
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.65s cubic-bezier(0.21, 0.65, 0.35, 1),
+    transform 0.65s cubic-bezier(0.21, 0.65, 0.35, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+/* Floating doodles */
+@keyframes doodle-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--doodle-rotate, 0deg));
+  }
+  50% {
+    transform: translateY(-14px) rotate(var(--doodle-rotate, 0deg));
+  }
+}
+.doodle-float {
+  animation: doodle-float 7s ease-in-out infinite;
+}
+
+/* Cursor-click nudge on the register pill */
+@keyframes click-nudge {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(2px, 2px);
+  }
+}
+.click-nudge {
+  animation: click-nudge 1.6s ease-in-out infinite;
+}
+
+/* Page transitions */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .doodle-float,
+  .click-nudge {
+    animation: none;
+  }
+  .reveal-hidden {
+    opacity: 1;
+    transform: none;
+  }
+}

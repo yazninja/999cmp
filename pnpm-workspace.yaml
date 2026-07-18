@@ -1,0 +1,11 @@
+allowBuilds:
+  "@parcel/watcher": false
+  "@tailwindcss/oxide": false
+  esbuild: false
+  sharp: true
+  unrs-resolver: false
+  vue-demi: false
+minimumReleaseAgeExclude:
+  - "@nuxtjs/i18n@10.4.1"
+overrides:
+  "vite": "^8.0.0-beta.15"
